@@ -58,8 +58,83 @@ var Jeport = function (pageSize = EnumPaperSize.A4) {
 
       if (element.nodeType === Node.TEXT_NODE) {
         return splitTextNode(element, currentPage, nextPage);
+      } else if (element.tagName === "TABLE") {
+        return splitTableNode(element, currentPage, nextPage);
       } else {
         return splitElementNode(element, currentPage, nextPage);
+      }
+    }
+
+    return currentPage;
+  }
+
+  function addContentToPage(element, currentPage) {
+    const clone = element.cloneNode(true);
+    currentPage.appendChild(clone);
+
+    if (currentPage.scrollHeight > pageHeight) {
+      currentPage.removeChild(clone);
+      const nextPage = createPage();
+      printContent.appendChild(nextPage);
+
+      if (element.nodeType === Node.TEXT_NODE) {
+        return splitTextNode(element, currentPage, nextPage);
+      } else if (element.tagName === "TABLE") {
+        return splitTableNode(element, currentPage, nextPage);
+      } else {
+        return splitElementNode(element, currentPage, nextPage);
+      }
+    }
+
+    return currentPage;
+  }
+
+  function splitTableNode(table, currentPage, nextPage) {
+    const clone = table.cloneNode(true);
+    const thead = clone.querySelector("thead");
+    const tbody = clone.querySelector("tbody");
+
+    if (!thead || !tbody) {
+      // 테이블에 thead나 tbody가 없는 경우 일반 요소처럼 처리
+      return splitElementNode(table, currentPage, nextPage);
+    }
+
+    let currentTable = clone.cloneNode(false);
+    let isFirstPage = true;
+    let currentTbody = document.createElement("tbody");
+    currentTable.appendChild(currentTbody);
+    currentPage.appendChild(currentTable);
+
+    const rows = Array.from(tbody.rows);
+    for (let i = 0; i < rows.length; i++) {
+      const row = rows[i].cloneNode(true);
+
+      if (isFirstPage && i === 0) {
+        // 첫 페이지의 첫 행 앞에 thead 삽입
+        currentTable.insertBefore(thead.cloneNode(true), currentTbody);
+      }
+
+      currentTbody.appendChild(row);
+
+      if (currentPage.scrollHeight > pageHeight) {
+        currentTbody.removeChild(row);
+
+        if (currentTbody.rows.length === 0) {
+          // 현재 페이지에 아무 행도 들어가지 않았다면 테이블 자체를 제거
+          currentPage.removeChild(currentTable);
+        }
+
+        nextPage = createPage();
+        printContent.appendChild(nextPage);
+        currentPage = nextPage;
+
+        currentTable = clone.cloneNode(false);
+        currentTbody = document.createElement("tbody");
+        currentTable.appendChild(currentTbody);
+        currentPage.appendChild(currentTable);
+
+        isFirstPage = false;
+        i--; // 현재 행을 다시 처리
       }
     }
 
