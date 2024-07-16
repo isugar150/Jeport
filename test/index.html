@@ -18,7 +18,13 @@
       var jeport;
       document.addEventListener("DOMContentLoaded", function () {
         const content = document.getElementsByClassName("content")[0];
-        jeport = new Jeport(content, { showPageNumbers: true });
+        jeport = new Jeport(content, {
+          showPageNumbers: true,
+          watermark: {
+            enabled: true,
+            image: "./watermark.jpg",
+          },
+        });
         jeport.init(() => {
           console.log("로딩 완료");
         });

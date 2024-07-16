@@ -9,6 +9,10 @@ var Jeport = function (el, options) {
 
   const defaultOptions = {
     showPageNumbers: true,
+    watermark: {
+      enabled: false,
+      image: undefined,
+    },
   };
 
   const settings = { ...defaultOptions, ...options };
@@ -42,9 +46,22 @@ var Jeport = function (el, options) {
     return this;
   };
 
-  function createPage() {
+  function createPage(isFirstPage = false) {
     const page = document.createElement("div");
     page.className = "page";
+
+    if (!isFirstPage) {
+      page.style.padding = "20mm";
+    }
+
+    if (settings.watermark.enabled && settings.watermark.image) {
+      const watermark = document.createElement("div");
+      watermark.className = "watermark";
+      const img = document.createElement("img");
+      img.src = settings.watermark.image;
+      watermark.appendChild(img);
+      page.appendChild(watermark);
+    }
 
     return page;
   }
@@ -73,10 +90,14 @@ var Jeport = function (el, options) {
 
     const pages = printContent.getElementsByClassName("page");
     for (let i = pages.length - 1; i >= 0; i--) {
-      if (
-        pages[i].textContent.trim() === "" &&
-        !pages[i].querySelector("img")
-      ) {
+      const pageContent = pages[i].textContent.trim();
+      const hasImage = pages[i].querySelector("img:not(.watermark img)");
+      const hasOnlyWatermarkAndPageNumber =
+        !hasImage &&
+        pageContent ===
+          (pages[i].querySelector(".page-number")?.textContent || "").trim();
+
+      if (pageContent === "" || hasOnlyWatermarkAndPageNumber) {
         printContent.removeChild(pages[i]);
       }
     }
