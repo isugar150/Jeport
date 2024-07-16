@@ -131,7 +131,6 @@ var Jeport = function (el, options) {
     const tbody = clone.querySelector("tbody");
 
     if (!thead || !tbody) {
-      // 테이블에 thead나 tbody가 없는 경우 일반 요소처럼 처리
       return splitElementNode(table, currentPage, nextPage);
     }
 
@@ -146,7 +145,6 @@ var Jeport = function (el, options) {
       const row = rows[i].cloneNode(true);
 
       if (isFirstPage && i === 0) {
-        // 첫 페이지의 첫 행 앞에 thead 삽입
         currentTable.insertBefore(thead.cloneNode(true), currentTbody);
       }
 
@@ -169,7 +167,7 @@ var Jeport = function (el, options) {
         currentPage.appendChild(currentTable);
 
         isFirstPage = false;
-        i--; // 현재 행을 다시 처리
+        i--;
       }
     }
 
@@ -257,7 +255,6 @@ window.onafterprint = function () {
   if (pages.length > 0) {
     const lastPage = pages[pages.length - 1];
     if (lastPage.offsetHeight < 10) {
-      // 마지막 페이지가 거의 비어있다면
       lastPage.remove();
     }
   }
