@@ -15,19 +15,17 @@ var Jeport = function (el, options) {
 
   const printContent = document.getElementsByClassName("print-content")[0];
 
-  const pageWidth = EnumPaperSize.A4.width;
   let pageHeight = EnumPaperSize.A4.height;
-  const margin = 10;
 
   this.init = function () {
     printContent.innerHTML = "";
     let currentPage = createPage();
     printContent.appendChild(currentPage);
-
-    // 실제 페이지 높이를 픽셀 단위로 계산
     pageHeight = currentPage.clientHeight;
 
     processContent(el, currentPage);
+
+    addPageNumbers(); // 페이지 번호 추가
 
     el.style.display = "none";
     printContent.style.display = "block";
@@ -38,7 +36,20 @@ var Jeport = function (el, options) {
   function createPage() {
     const page = document.createElement("div");
     page.className = "page";
+
     return page;
+  }
+
+  function addPageNumbers() {
+    const pages = printContent.getElementsByClassName("page");
+    const totalPages = pages.length;
+
+    for (let i = 0; i < totalPages; i++) {
+      const pageNumberDiv = document.createElement("div");
+      pageNumberDiv.className = "page-number";
+      pageNumberDiv.textContent = `${i + 1}/${totalPages}`;
+      pages[i].appendChild(pageNumberDiv);
+    }
   }
 
   function processContent(element, currentPage) {
@@ -219,7 +230,7 @@ window.onload = function () {
   const header = document.getElementsByTagName("header")[0];
   if (header) {
     const body = document.getElementsByTagName("body")[0];
-    body.style.paddingTop = `${header.clientHeight}px`;
+    body.style.marginTop = `${header.clientHeight}px`;
   }
 };
 

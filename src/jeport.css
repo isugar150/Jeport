@@ -43,11 +43,6 @@ header {
   word-break: break-word;
 }
 
-.page-content {
-  min-height: 100%;
-  padding-bottom: 20mm; /* 페이지 번호를 위한 공간 */
-}
-
 .page-number {
   position: absolute;
   bottom: 10mm;
@@ -125,11 +120,6 @@ header {
     overflow-wrap: break-word;
     word-wrap: break-word;
     word-break: break-word;
-  }
-
-  .page-content {
-    min-height: 100%;
-    padding-bottom: 20mm; /* 페이지 번호를 위한 공간 */
   }
 
   .page-number {
