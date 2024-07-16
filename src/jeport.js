@@ -1,14 +1,25 @@
-var Jeport = function (pageSize = EnumPaperSize.A4) {
-  const content = document.getElementsByClassName("content")[0];
+var Jeport = function (el, options) {
+  this.el = el;
+  this.options = options;
+
+  if (!el) {
+    console.error("Element is required for Jeport");
+    return;
+  }
+
+  const defaultOptions = {
+    showPageNumbers: true,
+  };
+
+  const settings = { ...defaultOptions, ...options };
+
   const printContent = document.getElementsByClassName("print-content")[0];
 
-  const pageWidth = pageSize.width;
-  let pageHeight = pageSize.height; // const에서 let으로 변경
+  const pageWidth = EnumPaperSize.A4.width;
+  let pageHeight = EnumPaperSize.A4.height;
   const margin = 10;
-  const contentWidth = pageWidth - 2 * margin;
-  const contentHeight = pageHeight - 2 * margin;
 
-  function init() {
+  this.init = function () {
     printContent.innerHTML = "";
     let currentPage = createPage();
     printContent.appendChild(currentPage);
@@ -16,11 +27,13 @@ var Jeport = function (pageSize = EnumPaperSize.A4) {
     // 실제 페이지 높이를 픽셀 단위로 계산
     pageHeight = currentPage.clientHeight;
 
-    processContent(content, currentPage);
+    processContent(el, currentPage);
 
-    content.style.display = "none";
+    el.style.display = "none";
     printContent.style.display = "block";
-  }
+
+    return this;
+  };
 
   function createPage() {
     const page = document.createElement("div");
@@ -196,28 +209,13 @@ var Jeport = function (pageSize = EnumPaperSize.A4) {
     return currentPageToUse;
   }
 
-  function setupPrintButton() {
-    const printBtn = document.getElementById("printBtn");
-    if (printBtn) {
-      printBtn.addEventListener("click", function () {
-        window.print();
-      });
-    }
-  }
-
-  return {
-    init: init,
-    setupPrintButton: setupPrintButton,
+  this.print = function () {
+    window.print();
+    return this;
   };
 };
 
-// EnumPaperSize는 그대로 유지
-
 window.onload = function () {
-  const jeport = Jeport();
-  jeport.init();
-  jeport.setupPrintButton();
-
   const header = document.getElementsByTagName("header")[0];
   if (header) {
     const body = document.getElementsByTagName("body")[0];
