@@ -39,6 +39,9 @@ var Jeport = function (el, options) {
     const page = document.createElement("div");
     page.className = "page";
 
+    page.style.minHeight = `${pageHeight}mm"`;
+    page.style.maxHeight = `${pageHeight}mm"`;
+
     return page;
   }
 
@@ -66,9 +69,17 @@ var Jeport = function (el, options) {
 
     const pages = printContent.getElementsByClassName("page");
     for (let i = pages.length - 1; i >= 0; i--) {
-      if (pages[i].textContent.trim() === "") {
+      if (
+        pages[i].textContent.trim() === "" &&
+        !pages[i].querySelector("img")
+      ) {
         printContent.removeChild(pages[i]);
       }
+    }
+
+    if (pages.length > 0) {
+      pages[pages.length - 1].style.minHeight = "auto";
+      pages[pages.length - 1].style.height = "auto";
     }
   }
 
@@ -76,7 +87,7 @@ var Jeport = function (el, options) {
     const clone = element.cloneNode(true);
     currentPage.appendChild(clone);
 
-    if (currentPage.scrollHeight > pageHeight) {
+    if (currentPage.scrollHeight > pageHeight - 10) {
       currentPage.removeChild(clone);
       const nextPage = createPage();
       printContent.appendChild(nextPage);
@@ -220,7 +231,9 @@ var Jeport = function (el, options) {
   }
 
   this.print = function () {
-    window.print();
+    setTimeout(function () {
+      window.print();
+    }, 250);
     return this;
   };
 };
@@ -230,5 +243,22 @@ window.onload = function () {
   if (header) {
     const body = document.getElementsByTagName("body")[0];
     body.style.marginTop = `${header.clientHeight}px`;
+  }
+};
+
+window.onbeforeprint = function () {
+  var style = document.createElement("style");
+  style.innerHTML = "@page { size: auto; margin: 0mm; }";
+  document.head.appendChild(style);
+};
+
+window.onafterprint = function () {
+  const pages = document.getElementsByClassName("page");
+  if (pages.length > 0) {
+    const lastPage = pages[pages.length - 1];
+    if (lastPage.offsetHeight < 10) {
+      // 마지막 페이지가 거의 비어있다면
+      lastPage.remove();
+    }
   }
 };
