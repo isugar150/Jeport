@@ -15,7 +15,7 @@ var Jeport = function (el, options) {
 
   const printContent = document.getElementsByClassName("print-content")[0];
 
-  let pageHeight = EnumPaperSize.A4.height;
+  let pageHeight = 297;
 
   this.init = function () {
     printContent.innerHTML = "";
@@ -25,7 +25,9 @@ var Jeport = function (el, options) {
 
     processContent(el, currentPage);
 
-    addPageNumbers(); // 페이지 번호 추가
+    if (settings.showPageNumbers) {
+      addPageNumbers();
+    }
 
     el.style.display = "none";
     printContent.style.display = "block";
@@ -62,7 +64,6 @@ var Jeport = function (el, options) {
       }
     }
 
-    // 빈 페이지 제거
     const pages = printContent.getElementsByClassName("page");
     for (let i = pages.length - 1; i >= 0; i--) {
       if (pages[i].textContent.trim() === "") {
@@ -144,7 +145,6 @@ var Jeport = function (el, options) {
         currentTbody.removeChild(row);
 
         if (currentTbody.rows.length === 0) {
-          // 현재 페이지에 아무 행도 들어가지 않았다면 테이블 자체를 제거
           currentPage.removeChild(currentTable);
         }
 
@@ -211,7 +211,6 @@ var Jeport = function (el, options) {
       }
     }
 
-    // 빈 페이지 검사 및 제거
     if (nextPage && nextPage.textContent.trim() === "") {
       printContent.removeChild(nextPage);
       return currentPage;
@@ -232,31 +231,4 @@ window.onload = function () {
     const body = document.getElementsByTagName("body")[0];
     body.style.marginTop = `${header.clientHeight}px`;
   }
-};
-
-const EnumPaperSize = {
-  A0: {
-    width: 2384,
-    height: 3370,
-  },
-  A1: {
-    width: 1684,
-    height: 2384,
-  },
-  A2: {
-    width: 1191,
-    height: 1684,
-  },
-  A3: {
-    width: 841,
-    height: 1191,
-  },
-  A4: {
-    width: 210, // mm
-    height: 297, // mm
-  },
-  A5: {
-    width: 420,
-    height: 595,
-  },
 };
