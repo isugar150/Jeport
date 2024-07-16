@@ -19,7 +19,9 @@
       document.addEventListener("DOMContentLoaded", function () {
         const content = document.getElementsByClassName("content")[0];
         jeport = new Jeport(content, { showPageNumbers: true });
-        jeport.init();
+        jeport.init(() => {
+          console.log("로딩 완료");
+        });
       });
     </script>
   </head>
@@ -118,7 +120,10 @@
       76 <br />
       77 <br />
       78 <br />
-
+      79 <br />
+      80 <br />
+      81 <br />
+      82 <br />
       <table>
         <thead>
           <tr>
@@ -220,10 +225,6 @@
           </tr>
         </tbody>
       </table>
-      79 <br />
-      80 <br />
-      81 <br />
-      82 <br />
       83 <br />
       84 <br />
       85 <br />
@@ -250,9 +251,7 @@
       106 <br />
       107 <br />
       108 <br />
-      109 <br />
-      <!-- 110 <br /> -->
+      109
     </div>
-    <div class="print-content"></div>
   </body>
 </html>

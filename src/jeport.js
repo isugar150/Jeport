@@ -13,11 +13,16 @@ var Jeport = function (el, options) {
 
   const settings = { ...defaultOptions, ...options };
 
-  const printContent = document.getElementsByClassName("print-content")[0];
+  var printContent;
 
   let pageHeight = 297;
 
-  this.init = function () {
+  this.init = function (callback) {
+    printContent = document.createElement("div");
+    printContent.className = "print-content";
+    printContent.style.height = "auto";
+    el.parentNode.appendChild(printContent);
+
     printContent.innerHTML = "";
     let currentPage = createPage();
     printContent.appendChild(currentPage);
@@ -32,15 +37,14 @@ var Jeport = function (el, options) {
     el.style.display = "none";
     printContent.style.display = "block";
 
+    callback();
+
     return this;
   };
 
   function createPage() {
     const page = document.createElement("div");
     page.className = "page";
-
-    page.style.minHeight = `${pageHeight}mm"`;
-    page.style.maxHeight = `${pageHeight}mm"`;
 
     return page;
   }
@@ -75,11 +79,6 @@ var Jeport = function (el, options) {
       ) {
         printContent.removeChild(pages[i]);
       }
-    }
-
-    if (pages.length > 0) {
-      pages[pages.length - 1].style.minHeight = "auto";
-      pages[pages.length - 1].style.height = "auto";
     }
   }
 
