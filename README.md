@@ -22,3 +22,9 @@ jeport.init();
 | 기능 | 유형 | 기본값 | 설명 |
 |---|---|---|---|
 | showPageNumbers | boolean | true | 페이지 마다 페이지 수를 표기합니다. |
+
+
+## 사용 이미지
+![1](https://github.com/user-attachments/assets/9d5567cf-280d-46ea-aad5-26d5e4e58ebd)  
+  
+![2](https://github.com/user-attachments/assets/439d784b-4278-4c27-aeae-d8c7c421dffd)
