@@ -1,11 +1,13 @@
 ## 소개
 
-- 샘플 페이지: https://isugar150.github.io/Jeport/test/
 - 웹 기반 보고서 생성 라이브러리
+- 샘플 페이지: https://isugar150.github.io/Jeport/test/
 
 ## 사용방법
 
-### 사용법
+### 원리 및 사용법
+
+- 타겟 div안에 있는 컨텐츠를 a4용지 사이즈에 맞게 재배치합니다.
 
 ```javascript
 var jeport = new Jeport(document.getElementsByClassName("content")[0], {
