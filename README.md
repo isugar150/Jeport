@@ -23,6 +23,11 @@ jeport.init(() => {
 });
 ```
 
+```html
+<!-- 내용 중간에 페이지를 바꾸려면 아래 div를 추가합니다. -->
+<div class="_jeport_page-brake"></div>
+```
+
 ### option
 
 | depth1          | depth2  | type    | default   | explanation                                 |

@@ -3,6 +3,10 @@ body {
   background-color: #d3d3d3 !important;
 }
 
+* {
+  z-index: 1001;
+}
+
 body {
   display: flex;
   flex-direction: column;
@@ -23,7 +27,7 @@ header {
   right: 0;
   padding: 5px 10px;
   background-color: antiquewhite;
-  z-index: 1000;
+  z-index: 99999;
 }
 
 ._jeport_page {

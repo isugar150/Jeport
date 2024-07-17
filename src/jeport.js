@@ -84,7 +84,15 @@ var Jeport = function (el, options) {
         child.nodeType === Node.ELEMENT_NODE ||
         (child.nodeType === Node.TEXT_NODE && child.textContent.trim() !== "")
       ) {
-        currentPage = addContentToPage(child, currentPage);
+        if (
+          child.nodeType === Node.ELEMENT_NODE &&
+          child.classList.contains("_jeport_page-brake")
+        ) {
+          currentPage = createPage();
+          printContent.appendChild(currentPage);
+        } else {
+          currentPage = addContentToPage(child, currentPage);
+        }
       }
     }
 
