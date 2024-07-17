@@ -242,11 +242,9 @@ var Jeport = function (el, options) {
     let { table: currentTable, tbody: currentTbody } =
       createTableStructure(true);
 
-    // 테이블을 추가하기 전에 현재 페이지가 비어있는지 확인
     if (isPageEmpty(currentPage)) {
       currentPage.appendChild(currentTable);
     } else {
-      // 현재 페이지가 이미 내용이 있다면 새 페이지를 만들어 테이블 추가
       let nextPage = createPage();
       printContent.appendChild(nextPage);
       currentPage = nextPage;
@@ -271,7 +269,7 @@ var Jeport = function (el, options) {
           ({ table: currentTable, tbody: currentTbody } =
             createTableStructure(false));
           currentPage.appendChild(currentTable);
-          i--; // Retry this row in the new table
+          i--;
         }
       }
     }
