@@ -139,10 +139,10 @@
   document.addEventListener("DOMContentLoaded", function () {
     const content = document.getElementsByClassName("content")[0];
     jeport = new Jeport(content, {
-      showPageNumbers: false,
+      showPageNumbers: true,
       watermark: {
         enabled: false,
-        image: "./watermark.jpg",
+        image: "./img/watermark.jpg",
       },
     });
     jeport.init(() => {

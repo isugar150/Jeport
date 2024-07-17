@@ -27,16 +27,60 @@ var Jeport = function (el, options) {
       return true;
     }
 
-    if (page.textContent.trim() !== "") {
+    const contentWithoutWatermarkAndPageNumber = Array.from(page.children)
+      .filter(
+        (child) =>
+          !child.classList.contains("_jeport_watermark") &&
+          !child.classList.contains("_jeport_page-number")
+      )
+      .map((child) => child.textContent)
+      .join("")
+      .trim();
+
+    if (contentWithoutWatermarkAndPageNumber !== "") {
       return false;
     }
 
-    const meaningfulElements = page.querySelectorAll("img, svg, canvas, table");
+    const meaningfulElements = Array.from(
+      page.querySelectorAll(
+        "img:not(._jeport_watermark img), svg, canvas, table"
+      )
+    );
     if (meaningfulElements.length > 0) {
       return false;
     }
 
-    for (let child of page.children) {
+    return true;
+  }
+
+  function isElementEmpty(element) {
+    if (
+      element.classList.contains("_jeport_watermark") ||
+      element.classList.contains("_jeport_page-number")
+    ) {
+      return true;
+    }
+
+    const tagName = element.tagName.toLowerCase();
+    if (tagName === "script" || tagName === "style") {
+      return true;
+    }
+
+    for (let node of element.childNodes) {
+      if (node.nodeType === Node.TEXT_NODE && node.nodeValue.trim() !== "") {
+        return false;
+      }
+    }
+
+    if (
+      element.tagName === "IMG" &&
+      element.src &&
+      !element.closest("._jeport_watermark")
+    ) {
+      return false;
+    }
+
+    for (let child of element.children) {
       if (!isElementEmpty(child)) {
         return false;
       }
