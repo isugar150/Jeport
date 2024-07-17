@@ -25,7 +25,7 @@ header {
   z-index: 1000;
 }
 
-.page {
+._jeport_page {
   position: relative;
   page-break-after: always;
   page-break-before: always;
@@ -44,7 +44,7 @@ header {
   flex-direction: column;
 }
 
-.watermark {
+._jeport_watermark {
   position: absolute;
   top: 0;
   left: 0;
@@ -57,19 +57,19 @@ header {
   z-index: 1000;
 }
 
-.watermark img {
+._jeport_watermark img {
   max-width: 50%;
   max-height: 50%;
   opacity: 0.1;
 }
 
-.page * {
+._jeport_page * {
   overflow-wrap: break-word;
   word-wrap: break-word;
   word-break: break-word;
 }
 
-.page-number {
+._jeport_page-number {
   position: absolute;
   bottom: 10mm;
   left: 0;
@@ -120,7 +120,7 @@ header {
     margin: 0;
   }
 
-  .page {
+  ._jeport_page {
     position: relative;
     visibility: visible;
     page-break-after: always;
@@ -138,22 +138,22 @@ header {
     display: flex;
     flex-direction: column;
   }
-  .last-page {
+  ._jeport_last-page {
     page-break-after: avoid !important;
   }
 
-  .page:last-child {
+  ._jeport_page:last-child {
     page-break-after: avoid !important;
   }
 
-  .page * {
+  ._jeport_page * {
     visibility: visible;
     overflow-wrap: break-word;
     word-wrap: break-word;
     word-break: break-word;
   }
 
-  .page > imgContent {
+  ._jeport_page > imgContent {
     position: absolute;
     top: 0;
     left: 0;
@@ -162,7 +162,7 @@ header {
     height: 100%;
   }
 
-  .page-number {
+  ._jeport_page-number {
     position: absolute;
     bottom: 10mm;
     left: 0;

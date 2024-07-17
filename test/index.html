@@ -1,18 +1,12 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <script src="./js/bootstrap.min.js"></script>
     <script src="../src/jeport.js"></script>
+    <link rel="stylesheet" href="./css/bootstrap.min.css" />
     <link rel="stylesheet" href="../src/jeport.css" />
 
-    <style>
-      table {
-        width: 100%;
-      }
-      th,
-      td {
-        border: 1px solid #000;
-      }
-    </style>
+    <style></style>
 
     <script>
       var jeport;
@@ -22,12 +16,12 @@
           showPageNumbers: true,
           watermark: {
             enabled: true,
-            image: "./watermark.jpg",
+            image: "./img/watermark.jpg",
           },
         });
         jeport.init(() => {
           console.log("callback");
-          jeport.print();
+          //   jeport.print();
         });
       });
     </script>
@@ -125,113 +119,66 @@
       74 <br />
       75 <br />
       76 <br />
+      <table class="table table-striped table-bordered">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">First</th>
+            <th scope="col">Last</th>
+            <th scope="col">Handle</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">1</th>
+            <td>Mark</td>
+            <td>Otto</td>
+            <td>@mdo</td>
+          </tr>
+          <tr>
+            <td colspan="4">
+              <table class="table mb-0">
+                <thead>
+                  <tr>
+                    <th scope="col">Header</th>
+                    <th scope="col">Header</th>
+                    <th scope="col">Header</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th scope="row">A</th>
+                    <td>First</td>
+                    <td>Last</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">B</th>
+                    <td>First</td>
+                    <td>Last</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">C</th>
+                    <td>First</td>
+                    <td>Last</td>
+                  </tr>
+                </tbody>
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <th scope="row">3</th>
+            <td>Larry</td>
+            <td>the Bird</td>
+            <td>@twitter</td>
+          </tr>
+        </tbody>
+      </table>
       77 <br />
       78 <br />
       79 <br />
       80 <br />
       81 <br />
       82 <br />
-      <table>
-        <thead>
-          <tr>
-            <th>1</th>
-            <th>2</th>
-            <th>3</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>1</td>
-            <td>1</td>
-            <td>1</td>
-          </tr>
-          <tr>
-            <td>2</td>
-            <td>2</td>
-            <td>2</td>
-          </tr>
-          <tr>
-            <td>3</td>
-            <td>3</td>
-            <td>3</td>
-          </tr>
-          <tr>
-            <td>4</td>
-            <td>4</td>
-            <td>4</td>
-          </tr>
-          <tr>
-            <td>5</td>
-            <td>5</td>
-            <td>5</td>
-          </tr>
-          <tr>
-            <td>6</td>
-            <td>6</td>
-            <td>6</td>
-          </tr>
-          <tr>
-            <td>7</td>
-            <td>7</td>
-            <td>7</td>
-          </tr>
-          <tr>
-            <td>8</td>
-            <td>8</td>
-            <td>8</td>
-          </tr>
-          <tr>
-            <td>9</td>
-            <td>9</td>
-            <td>9</td>
-          </tr>
-          <tr>
-            <td>10</td>
-            <td>10</td>
-            <td>10</td>
-          </tr>
-          <tr>
-            <td>11</td>
-            <td>11</td>
-            <td>11</td>
-          </tr>
-          <tr>
-            <td>12</td>
-            <td>12</td>
-            <td>12</td>
-          </tr>
-          <tr>
-            <td>13</td>
-            <td>13</td>
-            <td>13</td>
-          </tr>
-          <tr>
-            <td>14</td>
-            <td>14</td>
-            <td>14</td>
-          </tr>
-          <tr>
-            <td>15</td>
-            <td>15</td>
-            <td>15</td>
-          </tr>
-          <tr>
-            <td>16</td>
-            <td>16</td>
-            <td>16</td>
-          </tr>
-          <tr>
-            <td>17</td>
-            <td>17</td>
-            <td>17</td>
-          </tr>
-          <tr>
-            <td>18</td>
-            <td>18</td>
-            <td>18</td>
-          </tr>
-        </tbody>
-      </table>
       83 <br />
       84 <br />
       85 <br />

@@ -23,7 +23,7 @@ var Jeport = function (el, options) {
 
   this.init = function (callback) {
     printContent = document.createElement("div");
-    printContent.className = "print-content";
+    printContent.className = "_jeport_print-content";
     printContent.style.height = "auto";
     el.parentNode.appendChild(printContent);
 
@@ -48,7 +48,7 @@ var Jeport = function (el, options) {
 
   function createPage(isFirstPage = false) {
     const page = document.createElement("div");
-    page.className = "page";
+    page.className = "_jeport_page";
 
     if (!isFirstPage) {
       page.style.padding = "20mm";
@@ -56,7 +56,7 @@ var Jeport = function (el, options) {
 
     if (settings.watermark.enabled && settings.watermark.image) {
       const watermark = document.createElement("div");
-      watermark.className = "watermark";
+      watermark.className = "_jeport_watermark";
       const img = document.createElement("img");
       img.src = settings.watermark.image;
       watermark.appendChild(img);
@@ -72,7 +72,7 @@ var Jeport = function (el, options) {
 
     for (let i = 0; i < totalPages; i++) {
       const pageNumberDiv = document.createElement("div");
-      pageNumberDiv.className = "page-number";
+      pageNumberDiv.className = "_jeport_page-number";
       pageNumberDiv.textContent = `${i + 1}/${totalPages}`;
       pages[i].appendChild(pageNumberDiv);
     }
@@ -88,40 +88,21 @@ var Jeport = function (el, options) {
       }
     }
 
-    const pages = printContent.getElementsByClassName("page");
+    const pages = printContent.getElementsByClassName("_jeport_page");
     for (let i = pages.length - 1; i >= 0; i--) {
       const pageContent = pages[i].textContent.trim();
       const hasImage = pages[i].querySelector("img:not(.watermark img)");
       const hasOnlyWatermarkAndPageNumber =
         !hasImage &&
         pageContent ===
-          (pages[i].querySelector(".page-number")?.textContent || "").trim();
+          (
+            pages[i].querySelector("._jeport_page-number")?.textContent || ""
+          ).trim();
 
       if (pageContent === "" || hasOnlyWatermarkAndPageNumber) {
         printContent.removeChild(pages[i]);
       }
     }
-  }
-
-  function addContentToPage(element, currentPage) {
-    const clone = element.cloneNode(true);
-    currentPage.appendChild(clone);
-
-    if (currentPage.scrollHeight > pageHeight - 10) {
-      currentPage.removeChild(clone);
-      const nextPage = createPage();
-      printContent.appendChild(nextPage);
-
-      if (element.nodeType === Node.TEXT_NODE) {
-        return splitTextNode(element, currentPage, nextPage);
-      } else if (element.tagName === "TABLE") {
-        return splitTableNode(element, currentPage, nextPage);
-      } else {
-        return splitElementNode(element, currentPage, nextPage);
-      }
-    }
-
-    return currentPage;
   }
 
   function addContentToPage(element, currentPage) {
