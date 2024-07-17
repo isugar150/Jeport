@@ -25,8 +25,8 @@ jeport.init(() => {
 
 | depth1          | depth2  | type    | default   | explanation                                 |
 | --------------- | ------- | ------- | --------- | ------------------------------------------- |
-| showPageNumbers |         | boolean | true      | 페이지 마다 페이지 수를 표기합니다.         |
-| watermark       | enabled | boolean | true      | 워터마크 사용 여부를 정합니다.              |
+| showPageNumbers |         | boolean | false     | 페이지 마다 페이지 수를 표기합니다.         |
+| watermark       | enabled | boolean | false     | 워터마크 사용 여부를 정합니다.              |
 | watermark       | image   | string  | undefined | 워터마크로 사용할 이미지 경로를 입력합니다. |
 
 ## 사용 이미지

@@ -8,7 +8,7 @@ var Jeport = function (el, options) {
   }
 
   const defaultOptions = {
-    showPageNumbers: true,
+    showPageNumbers: false,
     watermark: {
       enabled: false,
       image: undefined,
@@ -67,7 +67,7 @@ var Jeport = function (el, options) {
   }
 
   function addPageNumbers() {
-    const pages = printContent.getElementsByClassName("page");
+    const pages = printContent.getElementsByClassName("_jeport_page");
     const totalPages = pages.length;
 
     for (let i = 0; i < totalPages; i++) {

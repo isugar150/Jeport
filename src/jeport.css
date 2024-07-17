@@ -1,5 +1,6 @@
-html {
-  background-color: #d3d3d3;
+html,
+body {
+  background-color: #d3d3d3 !important;
 }
 
 body {
