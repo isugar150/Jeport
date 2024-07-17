@@ -21,6 +21,55 @@ var Jeport = function (el, options) {
 
   let pageHeight = 297;
 
+  function isPageEmpty(page) {
+    const scriptsAndStyles = page.querySelectorAll("script, style");
+    if (scriptsAndStyles.length > 0) {
+      return true;
+    }
+
+    if (page.textContent.trim() !== "") {
+      return false;
+    }
+
+    const meaningfulElements = page.querySelectorAll("img, svg, canvas, table");
+    if (meaningfulElements.length > 0) {
+      return false;
+    }
+
+    for (let child of page.children) {
+      if (!isElementEmpty(child)) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  function isElementEmpty(element) {
+    const tagName = element.tagName.toLowerCase();
+    if (tagName === "script" || tagName === "style") {
+      return true;
+    }
+
+    for (let node of element.childNodes) {
+      if (node.nodeType === Node.TEXT_NODE && node.nodeValue.trim() !== "") {
+        return false;
+      }
+    }
+
+    if (element.tagName === "IMG" && element.src) {
+      return false;
+    }
+
+    for (let child of element.children) {
+      if (!isElementEmpty(child)) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
   this.init = function (callback) {
     printContent = document.createElement("div");
     printContent.className = "_jeport_print-content";
@@ -31,8 +80,11 @@ var Jeport = function (el, options) {
     let currentPage = createPage();
     printContent.appendChild(currentPage);
     pageHeight = currentPage.clientHeight;
+    currentPage = processContent(el, currentPage);
 
-    processContent(el, currentPage);
+    if (isPageEmpty(currentPage) && currentPage.parentNode === printContent) {
+      printContent.removeChild(currentPage);
+    }
 
     if (settings.showPageNumbers) {
       addPageNumbers();
@@ -79,6 +131,10 @@ var Jeport = function (el, options) {
   }
 
   function processContent(element, currentPage) {
+    if (element.nodeType === Node.ELEMENT_NODE && element.tagName === "TABLE") {
+      return processTable(element, currentPage);
+    }
+
     for (let child of element.childNodes) {
       if (
         child.nodeType === Node.ELEMENT_NODE ||
@@ -90,27 +146,93 @@ var Jeport = function (el, options) {
         ) {
           currentPage = createPage();
           printContent.appendChild(currentPage);
+        } else if (
+          child.nodeType === Node.ELEMENT_NODE &&
+          child.tagName === "TABLE"
+        ) {
+          currentPage = processTable(child, currentPage);
         } else {
           currentPage = addContentToPage(child, currentPage);
         }
       }
     }
 
-    const pages = printContent.getElementsByClassName("_jeport_page");
-    for (let i = pages.length - 1; i >= 0; i--) {
-      const pageContent = pages[i].textContent.trim();
-      const hasImage = pages[i].querySelector("img:not(.watermark img)");
-      const hasOnlyWatermarkAndPageNumber =
-        !hasImage &&
-        pageContent ===
-          (
-            pages[i].querySelector("._jeport_page-number")?.textContent || ""
-          ).trim();
+    const pages = Array.from(
+      printContent.getElementsByClassName("_jeport_page")
+    );
+    pages.forEach((page) => {
+      if (isPageEmpty(page) && page.parentNode === printContent) {
+        printContent.removeChild(page);
+      }
+    });
 
-      if (pageContent === "" || hasOnlyWatermarkAndPageNumber) {
-        printContent.removeChild(pages[i]);
+    return currentPage;
+  }
+
+  function processTable(table, currentPage) {
+    const clone = table.cloneNode(true);
+    const colgroup = clone.querySelector("colgroup");
+    const thead = clone.querySelector("thead");
+    const tbody = clone.querySelector("tbody");
+
+    if (!thead || !tbody) {
+      return addContentToPage(table, currentPage);
+    }
+
+    function createTableStructure(includeHeader) {
+      let newTable = document.createElement("table");
+      for (let attr of table.attributes) {
+        newTable.setAttribute(attr.name, attr.value);
+      }
+      if (colgroup) {
+        newTable.appendChild(colgroup.cloneNode(true));
+      }
+      if (includeHeader) {
+        newTable.appendChild(thead.cloneNode(true));
+      }
+      let newTbody = document.createElement("tbody");
+      newTable.appendChild(newTbody);
+      return { table: newTable, tbody: newTbody };
+    }
+
+    let { table: currentTable, tbody: currentTbody } =
+      createTableStructure(true);
+
+    // 테이블을 추가하기 전에 현재 페이지가 비어있는지 확인
+    if (isPageEmpty(currentPage)) {
+      currentPage.appendChild(currentTable);
+    } else {
+      // 현재 페이지가 이미 내용이 있다면 새 페이지를 만들어 테이블 추가
+      let nextPage = createPage();
+      printContent.appendChild(nextPage);
+      currentPage = nextPage;
+      currentPage.appendChild(currentTable);
+    }
+
+    const rows = Array.from(tbody.rows);
+    for (let i = 0; i < rows.length; i++) {
+      const row = rows[i].cloneNode(true);
+      currentTbody.appendChild(row);
+
+      if (currentPage.scrollHeight > pageHeight) {
+        currentTbody.removeChild(row);
+
+        if (currentTbody.rows.length === 0) {
+          currentPage.removeChild(currentTable);
+        } else {
+          let nextPage = createPage();
+          printContent.appendChild(nextPage);
+          currentPage = nextPage;
+
+          ({ table: currentTable, tbody: currentTbody } =
+            createTableStructure(false));
+          currentPage.appendChild(currentTable);
+          i--; // Retry this row in the new table
+        }
       }
     }
+
+    return currentPage;
   }
 
   function addContentToPage(element, currentPage) {
@@ -125,66 +247,9 @@ var Jeport = function (el, options) {
       if (element.nodeType === Node.TEXT_NODE) {
         return splitTextNode(element, currentPage, nextPage);
       } else if (element.tagName === "TABLE") {
-        return splitTableNode(element, currentPage, nextPage);
+        return processTable(element, nextPage);
       } else {
         return splitElementNode(element, currentPage, nextPage);
-      }
-    }
-
-    return currentPage;
-  }
-
-  function splitTableNode(table, currentPage, nextPage) {
-    const clone = table.cloneNode(true);
-    const colgroup = clone.querySelector("colgroup");
-    const thead = clone.querySelector("thead");
-    const tbody = clone.querySelector("tbody");
-
-    if (!thead || !tbody) {
-      return splitElementNode(table, currentPage, nextPage);
-    }
-
-    function createTable(isFirstPage) {
-      let newTable = document.createElement("table");
-      // 원본 테이블의 모든 속성을 복사합니다.
-      for (let attr of table.attributes) {
-        newTable.setAttribute(attr.name, attr.value);
-      }
-      if (colgroup) {
-        newTable.appendChild(colgroup.cloneNode(true));
-      }
-      if (isFirstPage) {
-        newTable.appendChild(thead.cloneNode(true));
-      }
-      return newTable;
-    }
-
-    let currentTable = createTable(true);
-    let currentTbody = document.createElement("tbody");
-    currentTable.appendChild(currentTbody);
-    currentPage.appendChild(currentTable);
-
-    const rows = Array.from(tbody.rows);
-    for (let i = 0; i < rows.length; i++) {
-      const row = rows[i].cloneNode(true);
-      currentTbody.appendChild(row);
-
-      if (currentPage.scrollHeight > pageHeight) {
-        currentTbody.removeChild(row);
-
-        if (currentTbody.rows.length === 0) {
-          currentPage.removeChild(currentTable);
-        }
-
-        nextPage = createPage();
-        printContent.appendChild(nextPage);
-        currentPage = nextPage;
-
-        currentTable = createTable(false);
-        currentTbody = document.createElement("tbody");
-        currentTable.appendChild(currentTbody);
-        currentPage.appendChild(currentTable);
-        i--;
       }
     }
 
