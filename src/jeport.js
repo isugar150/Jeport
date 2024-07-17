@@ -144,15 +144,25 @@ var Jeport = function (el, options) {
       return splitElementNode(table, currentPage, nextPage);
     }
 
-    let currentTable = clone.cloneNode(false);
+    function createTable(isFirstPage) {
+      let newTable = document.createElement("table");
+      // 원본 테이블의 모든 속성을 복사합니다.
+      for (let attr of table.attributes) {
+        newTable.setAttribute(attr.name, attr.value);
+      }
+      if (colgroup) {
+        newTable.appendChild(colgroup.cloneNode(true));
+      }
+      if (isFirstPage) {
+        newTable.appendChild(thead.cloneNode(true));
+      }
+      return newTable;
+    }
+
+    let currentTable = createTable(true);
     let currentTbody = document.createElement("tbody");
     currentTable.appendChild(currentTbody);
     currentPage.appendChild(currentTable);
-
-    if (colgroup) {
-      currentTable.appendChild(colgroup.cloneNode(true));
-    }
-    currentTable.appendChild(thead.cloneNode(true));
 
     const rows = Array.from(tbody.rows);
     for (let i = 0; i < rows.length; i++) {
@@ -170,15 +180,9 @@ var Jeport = function (el, options) {
         printContent.appendChild(nextPage);
         currentPage = nextPage;
 
-        currentTable = clone.cloneNode(false);
+        currentTable = createTable(false);
         currentTbody = document.createElement("tbody");
         currentTable.appendChild(currentTbody);
-
-        if (colgroup) {
-          currentTable.appendChild(colgroup.cloneNode(true));
-        }
-        currentTable.appendChild(thead.cloneNode(true));
-
         currentPage.appendChild(currentTable);
         i--;
       }
