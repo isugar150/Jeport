@@ -136,6 +136,7 @@ var Jeport = function (el, options) {
 
   function splitTableNode(table, currentPage, nextPage) {
     const clone = table.cloneNode(true);
+    const colgroup = clone.querySelector("colgroup");
     const thead = clone.querySelector("thead");
     const tbody = clone.querySelector("tbody");
 
@@ -144,19 +145,18 @@ var Jeport = function (el, options) {
     }
 
     let currentTable = clone.cloneNode(false);
-    let isFirstPage = true;
     let currentTbody = document.createElement("tbody");
     currentTable.appendChild(currentTbody);
     currentPage.appendChild(currentTable);
 
+    if (colgroup) {
+      currentTable.appendChild(colgroup.cloneNode(true));
+    }
+    currentTable.appendChild(thead.cloneNode(true));
+
     const rows = Array.from(tbody.rows);
     for (let i = 0; i < rows.length; i++) {
       const row = rows[i].cloneNode(true);
-
-      if (isFirstPage && i === 0) {
-        currentTable.insertBefore(thead.cloneNode(true), currentTbody);
-      }
-
       currentTbody.appendChild(row);
 
       if (currentPage.scrollHeight > pageHeight) {
@@ -173,9 +173,13 @@ var Jeport = function (el, options) {
         currentTable = clone.cloneNode(false);
         currentTbody = document.createElement("tbody");
         currentTable.appendChild(currentTbody);
-        currentPage.appendChild(currentTable);
 
-        isFirstPage = false;
+        if (colgroup) {
+          currentTable.appendChild(colgroup.cloneNode(true));
+        }
+        currentTable.appendChild(thead.cloneNode(true));
+
+        currentPage.appendChild(currentTable);
         i--;
       }
     }
