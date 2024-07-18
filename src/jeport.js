@@ -9,6 +9,7 @@ var Jeport = function (el, options) {
 
   const defaultOptions = {
     showPageNumbers: false,
+    pagePadding: "50px",
     watermark: {
       enabled: false,
       image: undefined,
@@ -53,67 +54,6 @@ var Jeport = function (el, options) {
     return true;
   }
 
-  function isElementEmpty(element) {
-    if (
-      element.classList.contains("_jeport_watermark") ||
-      element.classList.contains("_jeport_page-number")
-    ) {
-      return true;
-    }
-
-    const tagName = element.tagName.toLowerCase();
-    if (tagName === "script" || tagName === "style") {
-      return true;
-    }
-
-    for (let node of element.childNodes) {
-      if (node.nodeType === Node.TEXT_NODE && node.nodeValue.trim() !== "") {
-        return false;
-      }
-    }
-
-    if (
-      element.tagName === "IMG" &&
-      element.src &&
-      !element.closest("._jeport_watermark")
-    ) {
-      return false;
-    }
-
-    for (let child of element.children) {
-      if (!isElementEmpty(child)) {
-        return false;
-      }
-    }
-
-    return true;
-  }
-
-  function isElementEmpty(element) {
-    const tagName = element.tagName.toLowerCase();
-    if (tagName === "script" || tagName === "style") {
-      return true;
-    }
-
-    for (let node of element.childNodes) {
-      if (node.nodeType === Node.TEXT_NODE && node.nodeValue.trim() !== "") {
-        return false;
-      }
-    }
-
-    if (element.tagName === "IMG" && element.src) {
-      return false;
-    }
-
-    for (let child of element.children) {
-      if (!isElementEmpty(child)) {
-        return false;
-      }
-    }
-
-    return true;
-  }
-
   this.init = function (callback) {
     printContent = document.createElement("div");
     printContent.className = "_jeport_print-content";
@@ -147,7 +87,7 @@ var Jeport = function (el, options) {
     page.className = "_jeport_page";
 
     if (!isFirstPage) {
-      page.style.padding = "20mm";
+      page.style.padding = settings.pagePadding;
     }
 
     if (settings.watermark.enabled && settings.watermark.image) {
@@ -242,14 +182,7 @@ var Jeport = function (el, options) {
     let { table: currentTable, tbody: currentTbody } =
       createTableStructure(true);
 
-    if (isPageEmpty(currentPage)) {
-      currentPage.appendChild(currentTable);
-    } else {
-      let nextPage = createPage();
-      printContent.appendChild(nextPage);
-      currentPage = nextPage;
-      currentPage.appendChild(currentTable);
-    }
+    currentPage.appendChild(currentTable);
 
     const rows = Array.from(tbody.rows);
     for (let i = 0; i < rows.length; i++) {
