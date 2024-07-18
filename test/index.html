@@ -24,7 +24,7 @@
       const content = document.getElementsByClassName("content")[0];
       jeport = new Jeport(content, {
         showPageNumbers: true,
-        pagePadding: "10px",
+        // pagePadding: "10px",
         watermark: {
           enabled: true,
           image: "./img/watermark.jpg",
@@ -62,7 +62,15 @@
     </div>
   </header>
   <div class="content">
-    <div style="height: 200px"></div>
+    <div style="height: 100%;">
+      <div style="background-color: #333; width: 5mm; height: 100%; display: inline-block;">
+      </div>
+      <div style="display:inline-block;">
+        dsafdsaf
+      </div>
+    </div>
+
+    <div style=" height: 200px"></div>
     <div style="display: flex">
       <h1 style="margin: auto">Jeport 표지</h1>
     </div>

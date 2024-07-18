@@ -9,7 +9,7 @@ var Jeport = function (el, options) {
 
   const defaultOptions = {
     showPageNumbers: false,
-    pagePadding: "50px",
+    pagePadding: "50px 30px",
     watermark: {
       enabled: false,
       image: undefined,
