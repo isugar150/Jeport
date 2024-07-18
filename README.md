@@ -9,19 +9,20 @@
 
 - 타겟 div안에 있는 컨텐츠를 a4용지 사이즈에 맞게 재배치합니다.
 
-```javascript
-var jeport = new Jeport(document.getElementsByClassName("content")[0], {
-  showPageNumbers: true,
-  pagePadding: '50px 30px',
-  watermark: {
-    enabled: true,
-    image: "./watermark.jpg",
-  },
-});
-jeport.init(() => {
-  console.log("callback");
-  jeport.print();
-});
+```html
+<script>
+  var jeport = new Jeport(document.getElementsByClassName("content")[0], {
+    showPageNumbers: true,
+    pagePadding: "50px 30px",
+    watermark: { enabled: true, image: "./watermark.jpg" },
+  });
+  jeport.init(() => {
+    console.log("callback");
+    jeport.print();
+  });
+</script>
+
+<div class="content">출력할 내용</div>
 ```
 
 ```html
