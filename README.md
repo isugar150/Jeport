@@ -40,6 +40,5 @@ jeport.init(() => {
 
 ## 사용 이미지
 
-![1](https://github.com/user-attachments/assets/9d5567cf-280d-46ea-aad5-26d5e4e58ebd)
-
-![2](https://github.com/user-attachments/assets/439d784b-4278-4c27-aeae-d8c7c421dffd)
+![스크린샷 2024-07-18 오후 1 54 52](https://github.com/user-attachments/assets/bd726f77-c3ec-46e9-8a40-98266cc5b74f)
+![isugar150 github io_Jeport_test_](https://github.com/user-attachments/assets/705109de-7b22-4257-ab01-a2c49e2140f4)
