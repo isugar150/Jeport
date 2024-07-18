@@ -26,6 +26,7 @@ jeport.init(() => {
 
 ```html
 <!-- 내용 중간에 페이지를 바꾸려면 아래 div를 추가합니다. -->
+<!-- 1depth에서만 작동함 -->
 <div class="_jeport_page-brake"></div>
 ```
 
