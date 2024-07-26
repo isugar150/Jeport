@@ -10,6 +10,9 @@
 - 타겟 div안에 있는 컨텐츠를 a4용지 사이즈에 맞게 재배치합니다.
 
 ```html
+<script src="https://isugar150.github.io/Jeport/dist/jeport-1.0.js"></script>
+<link rel="stylesheet" href="https://isugar150.github.io/Jeport/dist/jeport-1.0.css" />
+
 <script>
   var jeport = new Jeport(document.getElementsByClassName("content")[0], {
     showPageNumbers: true,
