@@ -37,7 +37,7 @@
 
 ### option
 
-| depth1          | depth2  | type    | default   | explanation                                         |
+| depth1          | depth2  | type    | default   | description                                         |
 | --------------- | ------- | ------- | --------- | --------------------------------------------------- |
 | showPageNumbers |         | boolean | false     | 페이지 마다 페이지 수를 표기합니다.                 |
 | pagePadding     |         | string  | 50px 30px | 페이지 마다 여백을 설정합니다. CSS의 padding값 입력 |
