@@ -8,6 +8,7 @@
 ### 원리 및 사용법
 
 - 타겟 div안에 있는 컨텐츠를 a4용지 사이즈에 맞게 재배치합니다.
+- 인쇄시 레이아웃이 틀어지면 프린터 설정에서 a4용지로 되어있는지 확인해주세요.
 ##### Import
 ``` html
 <script src="https://isugar150.github.io/Jeport/dist/jeport-1.0.js"></script>
